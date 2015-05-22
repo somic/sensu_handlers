@@ -5,8 +5,8 @@ require "#{File.dirname(__FILE__)}/sensu_jira_client"
 
 class JiraHandler < BaseHandler
 
-  def jira_client
-    @jira_client ||= SensuJiraIssue.new(
+  def jira_issue
+    @jira_issue ||= SensuJiraIssue.new(
       sensu_client_name=@event['client']['name'],
       sensu_check_name=@event['check']['name'],
       jira_server_options=get_options)
@@ -14,7 +14,7 @@ class JiraHandler < BaseHandler
 
   def create_issue(summary, full_description, project)
     begin
-      jira_client.create_issue(summary, full_description, project)
+      jira_issue.create_issue(summary, full_description, project)
       handler_success
     rescue Exception => e
       handler_failure
@@ -24,7 +24,7 @@ class JiraHandler < BaseHandler
 
   def close_issue(output)
     begin
-      jira_client.close_issue(output)
+      jira_issue.close_issue(output)
       handler_success
     rescue Exception => e
       handler_failure

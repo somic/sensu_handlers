@@ -8,7 +8,7 @@ class SensuJiraClient
   attr_reader :jira_server_options
 
   def initialize(jira_server_options)
-    @sensu_client_name = sensu_client_name
+    @jira_server_options = jira_server_options
     @labels = [ "labels='SENSU'" ]
   end
 
