@@ -55,7 +55,7 @@ class sensu_handlers(
   validate_hash($teams)
   validate_bool($include_graphite, $include_aws_prune)
 
-  ensure_packages(['sensu-community-plugins'])
+  class { 'sensu_handlers::install': }
 
   file { '/etc/sensu/handlers/base.rb':
     source => 'puppet:///modules/sensu_handlers/base.rb',
