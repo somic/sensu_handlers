@@ -4,6 +4,17 @@
 #
 class sensu_handlers::pagerduty inherits sensu_handlers {
 
+  if $enable_filters {
+    sensu::filter { 'page_true_only':
+      attributes => {
+        check => { page => true },
+      },
+    }
+    $filters = [ 'page_true_only' ]
+  } else {
+    $filters = [ ]
+  }
+
   ensure_packages(['rubygem-redphone'])
   sensu::handler { 'pagerduty':
     type    => 'pipe',
@@ -12,6 +23,7 @@ class sensu_handlers::pagerduty inherits sensu_handlers {
       teams => $teams,
     },
     require => [ Package['sensu-community-plugins'], Package['rubygem-redphone'] ],
+    filters => $filters,
   }
   # If we are going to send pagerduty alerts, we need to be sure it actually is up
   monitoring_check { 'check_pagerduty':

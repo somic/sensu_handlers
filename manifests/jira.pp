@@ -4,6 +4,17 @@
 #
 class sensu_handlers::jira inherits sensu_handlers {
 
+  if $enable_filters {
+    sensu::filter { 'ticket_true_only':
+      attributes => {
+        check => { ticket => true }
+      },
+    }
+    $filters = [ 'ticket_true_only' ]
+  } else {
+    $filters = [ ]
+  }
+
   package { 'rubygem-jira-ruby': ensure => '0.1.9' } ->
   sensu::handler { 'jira':
     type    => 'pipe',
@@ -14,6 +25,7 @@ class sensu_handlers::jira inherits sensu_handlers {
       password => $jira_password,
       site     => $jira_site,
     },
+    filters => $filters,
   }
   if $::lsbdistcodename == 'Lucid' {
     # So sorry for the httprb monkeypatch. It is Debian bug 564168 that took

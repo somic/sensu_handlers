@@ -42,6 +42,7 @@ class sensu_handlers(
   $teams,
   $package_ensure        = 'latest',
   $default_handler_array = [ 'nodebot', 'pagerduty', 'mailer', 'jira' ],
+  $enable_filters        = false,
   $jira_username         = 'sensu',
   $jira_password         = 'sensu',
   $jira_site             = "jira.${::domain}",
